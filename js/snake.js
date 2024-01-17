@@ -11,7 +11,9 @@ let setIntervalId;
 let score = 0;
 
 // Den High Score Wert aus dem local storage holen, wenn nicht vorhanden ist er Null
-let highScore = localStorage.getItem(".high-score") || 0;
+let highScore = localStorage.getItem("high-score") || 0;
+highScoreElement.innerHTML = `High Score: ${highScore}`;
+
 
 //Foodspawn
 let changeFoodPosition = () => {
@@ -55,7 +57,8 @@ let initGame = () => {
 
         highScore = score >=highScore ? score : highScore;
         localStorage.setItem("high-score", highScore);
-        scoreElement.innerHTML = `Score: ${score}`
+        scoreElement.innerHTML = `Score: ${score}`;
+        highScoreElement.innerHTML = `High Score: ${highScore}`;
     }
 
     for (let i = snakeBody.length -1; i > 0; i--) {
