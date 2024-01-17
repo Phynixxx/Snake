@@ -1,6 +1,8 @@
 let playground = document.querySelector(".playground");
 let scoreElement = document.querySelector(".score");
 let highScoreElement = document.querySelector(".high-score");
+let popupButton = document.querySelector(".try-again");
+let popUp = document.querySelector(".popupbackground");
 
 let gameOver = false;
 let foodX, foodY;
@@ -9,6 +11,20 @@ let movementX = 0, movementY = 0;
 let snakeBody = [];
 let setIntervalId;
 let score = 0;
+
+
+function togglePopup() {
+    popUp.classList.toggle("hidden");
+}
+
+let restartGame = () => {
+    togglePopup();
+    location.reload();
+    initGame();
+}
+
+// Verbindet die restartGame-Funktion mit dem "Try Again"-Button
+popupButton.addEventListener("click", restartGame);
 
 // Den High Score Wert aus dem local storage holen, wenn nicht vorhanden ist er Null
 let highScore = localStorage.getItem("high-score") || 0;
@@ -24,8 +40,7 @@ let changeFoodPosition = () => {
 // Wenn "Game over" Seite neu laden
 let handleGameOver = () => {
     clearInterval(setIntervalId);
-    alert("Game over! Press OK to replay...");
-    location.reload();
+    togglePopup();
 }
 
 //Richtungsänderung
