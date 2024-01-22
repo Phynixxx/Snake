@@ -11,7 +11,7 @@ let movementX = 0, movementY = 0;
 let snakeBody = [];
 let setIntervalId;
 let score = 0;
-
+let gridSize = 30;
 
 function togglePopup() {
     popUp.classList.toggle("hidden");
@@ -21,6 +21,16 @@ let restartGame = () => {
     togglePopup();
     location.reload();
     initGame();
+}
+
+function resetGame() {
+    gameOver = false;
+    foodX = foodY = snakeX = snakeY = 15;
+    movementX = movementY = 0;
+    snakeBody = [];
+    score = 0;
+    gridSize = 30;
+    clearInterval(setIntervalId);
 }
 
 // Verbindet die restartGame-Funktion mit dem "Try Again"-Button
@@ -33,14 +43,20 @@ highScoreElement.innerHTML = `High Score: ${highScore}`;
 
 //Foodspawn
 let changeFoodPosition = () => {
-    foodX = Math.floor(Math.random() * 30) + 1;
-    foodY = Math.floor(Math.random() * 30) + 1;
+    // nimmt eine zufällige Position innerhalb der aktuellen Spielfeldgröße
+    foodX = Math.floor(Math.random() * gridSize) + 1;
+    foodY = Math.floor(Math.random() * gridSize) + 1;
+
+    // Stellt sicher, dass die Position innerhalb der Spielfeldgrenzen bleibt
+    foodX = Math.max(1, Math.min(foodX, gridSize - 1));
+    foodY = Math.max(1, Math.min(foodY, gridSize - 1));
 }
 
 // Wenn "Game over" Seite neu laden
 let handleGameOver = () => {
     clearInterval(setIntervalId);
     togglePopup();
+    resetGame()
 }
 
 //Richtungsänderung
@@ -62,6 +78,10 @@ let changeDirection = (e) => {
 
 let initGame = () => {
    if(gameOver) return handleGameOver();
+
+   // Aktualisiere das Rasterlayout basierend auf gridSize
+   playground.style.setProperty('--grid-size', gridSize);
+
     let htmlMarkup = `<div class="food" style="grid-area: ${foodY} / ${foodX}"></div>`;
 
     //Überrüft, ob der Kopf Food berührt
@@ -74,6 +94,11 @@ let initGame = () => {
         localStorage.setItem("high-score", highScore);
         scoreElement.innerHTML = `Score: ${score}`;
         highScoreElement.innerHTML = `High Score: ${highScore}`;
+
+        // Wenn score ein Vielfaches von 20 ist, verkleinert sich das Spielfeld
+        if (score % 20 === 0) {
+        gridSize--;
+        }
     }
 
     for (let i = snakeBody.length -1; i > 0; i--) {
@@ -109,4 +134,4 @@ let initGame = () => {
 changeFoodPosition();
 setIntervalId = setInterval(initGame, 125);
 
-document.addEventListener("keydown", changeDirection);
+document.addEventListener("keydown", changeDirection)

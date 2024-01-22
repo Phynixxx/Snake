@@ -37,12 +37,20 @@ body {
     height: 100%;
     display: grid;
     grid-template: repeat(30, 1fr) / repeat(30, 1fr);
+    animation: shrinkAnimation 1s forwards;
+}
+
+@keyframes shrinkAnimation {
+    to {
+        grid-template-columns: repeat(var(--grid-size, 30), 1fr);
+        grid-template-rows: repeat(var(--grid-size, 30), 1fr);
+    }
 }
 
 .playground .food {
     background: #f62a2a;
-    border-radius: 10px;
-    border: #041429 solid 1.2px;
+    border-radius: 15px;
+    border: #041429 solid 2.5px;
 }
 
 .playground .snake-head {
